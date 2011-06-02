@@ -9,12 +9,10 @@ Mac. Download from:
 h1. Bundled Plugins
 
 * "Ack":http://www.vim.org/scripts/script.php?script_id=2572 - type :Ack [search pattern] to search your entire project
-* "Align":http://www.vim.org/scripts/script.php?script_id=294 - align blocks of text using equal sign, make comment boxes and more
 * "bufexplorer":http://www.vim.org/scripts/script.php?script_id=42 - manage your file buffers
 * "Command-T":http://www.vim.org/scripts/script.php?script_id=3025 - the fastest and most intuitive way for opening files in your project
 * "cucumber":http://www.vim.org/scripts/script.php?script_id=2973 - support for cucumber features such as syntax highlight, indentation, etc
 * "endwise":http://www.vim.org/scripts/script.php?script_id=2386 - support to close Ruby blocks such as 'if', 'do' with 'end'
-* "fugitive":http://www.vim.org/scripts/script.php?script_id=2975 - support for Git, adding convenient commands such as :Gstatus, :Gread, :Gmove
 * "haml":http://www.vim.org/scripts/script.php?script_id=1773 - syntax highlight for HAML
 * "markdown":http://www.vim.org/scripts/script.php?script_id=1242 - syntax highlight for Markdown
 * "NERD_commenter":http://www.vim.org/scripts/script.php?script_id=1218 - support to comment lines of code
@@ -31,8 +29,6 @@ h1. Bundled Plugins
 * "vim-ruby-sinatra":https://github.com/hallison/vim-ruby-sinatra - syntax highlight for Sinatra
 * "vim-ruby":https://github.com/vim-ruby/vim-ruby/wiki - syntax highlight, smart identation, auto-complete for Ruby
 * "vim-textobj-rubyblock":http://vimcasts.org/blog/2010/12/a-text-object-for-ruby-blocks/ - smart block selection in Ruby code
-* "vividchalk":http://www.vim.org/scripts/script.php?script_id=1891 - color scheme inspired by the classic Vibrant for Textmate
-* "Zencoding":http://www.vim.org/scripts/script.php?script_id=2981 - powerful way for HTML abbreviations (learn here: http://code.google.com/p/zen-coding/). Type abbreviation and press Ctrl+Y+comma (c-y ,)
 
 h1. Usage
 
@@ -61,28 +57,11 @@ on Linux/Mac like this:
 echo "source ~/.vim/vimrc" > ~/.vimrc
 </code></pre>
 
-On Windows you should create a <tt>_vimrc</tt> (underline instead of dot) and add
-the following line inside:
-
-<pre><code>
-source ~/vimfiles/vimrc
-</code></pre>
-
-This way you can override the default configuration by adding your own inside
-this file.
-
 You should also create a new <tt>.gvimrc</tt> file in your home directory. You can do 
 it on Linux/Mac like this:
 
 <pre><code>
 echo "source ~/.vim/gvimrc" > ~/.gvimrc
-</code></pre>
-
-On Windows you should create a <tt>_gvimrc</tt> (underline instead of dot) and add
-the following line inside:
-
-<pre><code>
-source ~/vimfiles/gvimrc
 </code></pre>
 
 This way you can override the default GUI configuration by adding your own inside
@@ -104,19 +83,11 @@ You will need these dependencies figured out:
 * Exuberant Ctags (http://ctags.sourceforge.net/)
 * Ncurses-term (in Linux only)
 
-In Ubuntu, for example, you will have to do:
-
-<pre><code>
-apt-get install exuberant-ctags ncurses-term
-</code></pre>
-
 In OS X, you can install ctags with homebrew
 
 <pre><code>
 brew install ctags
 </code></pre>
-
-On Windows you have to download Ctags and add ctags.exe in your PATH.
 
 Mac OS X and most Linux distros come with Ruby already. If you're in Windows
 look for Luis Lavena's latest Ruby Installer (http://rubyforge.org/projects/rubyinstaller/)
