@@ -1,3 +1,4 @@
+set t_Co=256
 "necessary on some Linux distros for pathogen to properly load bundles
 filetype off
 
@@ -188,10 +189,6 @@ set wildmode=list:longest   "make cmdline tab completion similar to bash
 set wildmenu                "enable ctrl-n and ctrl-p to scroll thru matches
 set wildignore=*.o,*.obj,*~ "stuff to ignore when tab completing
 
-"display tabs and trailing spaces
-"set list
-"set listchars=tab:\ \ ,extends:>,precedes:<
-" disabling list because it interferes with soft wrap
 
 set formatoptions-=o "dont continue comments when pushing o/O
 
@@ -222,14 +219,14 @@ if has("gui_running")
     "tell the term has 256 colors
     set t_Co=256
 
-    colorscheme railscasts
+    colorscheme cobalt
     set guitablabel=%M%t
     set lines=40
     set columns=115
 
     if has("gui_gnome")
         set term=gnome-256color
-        colorscheme railscasts
+        colorscheme cobalt
         set guifont=Monospace\ Bold\ 12
     endif
 
@@ -258,9 +255,10 @@ else
     "set railscasts colorscheme when running vim in gnome terminal
     if $COLORTERM == 'gnome-terminal'
         set term=gnome-256color
-        colorscheme railscasts
+        colorscheme cobalt
     else
-        colorscheme default
+      ""colorscheme molokai
+      colorscheme cobalt
     endif
 endif
 
@@ -268,18 +266,23 @@ endif
 " else in your ~/.vimrc file, such as:
 " nmap <silent> <Leader>q <Plug>PeepOpen
 
-silent! nmap <silent> <Leader>p :NERDTreeToggle<CR>
-nnoremap <silent> <C-f> :call FindInNERDTree()<CR>
+silent! nmap <silent> <C-f> :NERDTreeToggle<CR>
 
 "make <c-l> clear the highlight as well as redraw
 nnoremap <C-L> :nohls<CR><C-L>
 inoremap <C-L> <C-O>:nohls<CR>
 
+map <C-1> <C-O>:nohls<CR>
+
 "map to bufexplorer
-nnoremap <leader>b :BufExplorer<cr>
+silent! nnoremap <leader>b :BufExplorerHorizontalSplit<cr>
+silent! nnoremap <space>b :BufExplorerHorizontalSplit<cr>
+silent! nnoremap <c-b> :BufExplorerHorizontalSplit<cr>
 
 "map to CommandT TextMate style finder
-nnoremap <leader>t :CommandT<CR>
+silent! nnoremap <leader>t :CommandT<CR>
+silent! nnoremap <space>t :CommandT<CR>
+silent! nnoremap <c-t> :CommandT<CR>
 
 "map Q to something useful
 noremap Q gq
@@ -388,20 +391,111 @@ vmap <D-]> >gv
 
 let ScreenShot = {'Icon':0, 'Credits':0, 'force_background':'#FFFFFF'}
 
-"Enabling Zencoding
-let g:user_zen_settings = {
-  \  'php' : {
-  \    'extends' : 'html',
-  \    'filters' : 'c',
-  \  },
-  \  'xml' : {
-  \    'extends' : 'html',
-  \  },
-  \  'haml' : {
-  \    'extends' : 'html',
-  \  },
-  \  'erb' : {
-  \    'extends' : 'html',
-  \  },
- \}
+"""""" from old vim 
 
+"Wrapped lines up and down works
+nmap <Down> gj
+nmap <Up> gk
+set fo=l
+set list
+set listchars=tab:\ \ ,extends:>,precedes:<
+
+"Toggle nerdtree
+silent! map <silent> <C-f> :NERDTreeToggle<CR>
+silent! vmap <silent> <C-f> <esc>:NERDTreeToggle<CR>
+
+"Higlight search
+noremap <F4> :set hlsearch! hlsearch?<CR> 
+vmap <silent> <backspace> dd
+
+
+"Navigating buffers
+imap <D-left> <esc>:bprevious<cr>
+map <D-left> :bprevious<cr>
+vmap <D-left> <esc>:bprevious<cr>
+
+imap <D-right> <esc>:bnext<cr>
+map <D-right> :bnext<cr>
+vmap <D-right> <esc>:bnext<cr>
+
+"Pastemode
+nnoremap <f3> :set invpaste paste?<cr>
+set pastetoggle=<f3>
+set showmode
+
+"Set to auto read when a file is changed from the outside
+set autoread
+set switchbuf=usetab
+set autoindent
+set smartindent
+set ignorecase
+set smartcase
+set cursorline
+set nocursorcolumn
+
+"Move a line of text using command
+
+imap <D-down> <esc>mz:m+<cr>`z
+imap <D-up> <esc>mz:m-2<cr>`z
+nmap <D-down> mz:m+<cr>`z
+nmap <D-up> mz:m-2<cr>`z
+vmap <D-down> :m'>+<cr>`<my`>mzgv`yo`z
+vmap <D-up> :m'<-2<cr>`>my`
+
+"Search around
+set wrapscan
+
+"Toggle comments
+map <silent>c<space> <esc>:call NERDComment(0, "toggle")<cr>
+vmap <silent>c<space> <esc>:call NERDComment(1, "toggle")<cr>
+
+"Backspace inserts editing mode
+vmap <silent> <backspace> dd
+nmap <silent> <backspace> i<backspace>
+
+"Shift + arrows make a selection like in traditional editors
+imap <s-right> <esc>v
+imap <s-left> <esc>v
+map <s-right> <esc>v
+map <s-left> <esc>v
+
+imap <s-up> <esc>V
+imap <s-down> <esc>V
+map <s-up> <esc>V
+map <s-down> <esc>V
+
+vmap <s-down> <down>
+vmap <s-up> <up>
+vmap <s-left> <left>
+vmap <s-right> <right>
+
+"Go to given tab
+imap <D-1> <Esc>1gt
+imap <D-2> <Esc>2gt
+imap <D-3> <Esc>3gt
+imap <D-4> <Esc>4gt
+imap <D-5> <Esc>5gt
+imap <D-6> <Esc>6gt
+imap <D-7> <Esc>7gt
+imap <D-8> <Esc>8gt
+imap <D-9> <Esc>9gt
+
+vmap <D-1> <Esc>1gt
+vmap <D-2> <Esc>2gt
+vmap <D-3> <Esc>3gt
+vmap <D-4> <Esc>4gt
+vmap <D-5> <Esc>5gt
+vmap <D-6> <Esc>6gt
+vmap <D-7> <Esc>7gt
+vmap <D-8> <Esc>8gt
+vmap <D-9> <Esc>9gt
+
+map <D-1> <Esc>1gt
+map <D-2> <Esc>2gt
+map <D-3> <Esc>3gt
+map <D-4> <Esc>4gt
+map <D-5> <Esc>5gt
+map <D-6> <Esc>6gt
+map <D-7> <Esc>7gt
+map <D-8> <Esc>8gt
+map <D-9> <Esc>9gt
