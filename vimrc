@@ -410,13 +410,13 @@ vmap <silent> <backspace> dd
 
 
 "Navigating buffers
-imap <D-left> <esc>:bprevious<cr>
-map <D-left> :bprevious<cr>
-vmap <D-left> <esc>:bprevious<cr>
+imap <c-left> <esc>:bprevious<cr>
+map <c-left> :bprevious<cr>
+vmap <c-left> <esc>:bprevious<cr>
 
-imap <D-right> <esc>:bnext<cr>
-map <D-right> :bnext<cr>
-vmap <D-right> <esc>:bnext<cr>
+imap <c-right> <esc>:bnext<cr>
+map <c-right> :bnext<cr>
+vmap <c-right> <esc>:bnext<cr>
 
 "Pastemode
 nnoremap <f3> :set invpaste paste?<cr>
