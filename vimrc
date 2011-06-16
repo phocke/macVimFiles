@@ -499,3 +499,15 @@ map <D-6> <Esc>6gt
 map <D-7> <Esc>7gt
 map <D-8> <Esc>8gt
 map <D-9> <Esc>9gt
+
+" Bubble single lines
+nmap <C-Up> ddkP
+nmap <C-Down> ddp
+" Bubble multiple lines
+vmap <C-Up> xkP`[V`]
+vmap <C-Down> xp`[V`]
+
+"Don't loose selection after indenting
+"vnoremap < <gv
+"vnoremap > >gv
+nmap // <Esc>:Ack!<space>
