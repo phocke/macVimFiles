@@ -177,6 +177,7 @@ endfunction
 "indent settings
 set shiftwidth=2
 set softtabstop=2
+set tabstop=2
 set expandtab
 set autoindent
 
@@ -404,8 +405,6 @@ set listchars=tab:\ \ ,extends:>,precedes:<
 silent! map <silent> <C-f> :NERDTreeToggle<CR>
 silent! vmap <silent> <C-f> <esc>:NERDTreeToggle<CR>
 
-"Higlight search
-noremap <F4> :set hlsearch! hlsearch?<CR> 
 vmap <silent> <backspace> dd
 
 
@@ -422,6 +421,12 @@ vmap <c-right> <esc>:bnext<cr>
 nnoremap <f3> :set invpaste paste?<cr>
 set pastetoggle=<f3>
 set showmode
+
+"Higlight search
+nnoremap <F4> :set hlsearch! hlsearch?<CR> 
+
+"Reload vimrc
+map <F5> :source $MYVIMRC<CR>:echoe "Vimrc Reloaded!!!"<CR>
 
 "Set to auto read when a file is changed from the outside
 set autoread
@@ -507,7 +512,28 @@ nmap <C-Down> ddp
 vmap <C-Up> xkP`[V`]
 vmap <C-Down> xp`[V`]
 
-"Don't loose selection after indenting
-"vnoremap < <gv
-"vnoremap > >gv
 nmap // <Esc>:Ack!<space>
+
+"highlight whitespace
+"set listchars=tab:>-,trail:-
+set list
+
+set list listchars=tab:→\ ,trail:·
+
+" PARENTHESIS, SQUARE BRACKET, BRACE, QUOTE EXPANDING
+" ;<open bracket or quote> or ;<close bracket> wraps the visual-mode higlighted 
+" block in a bracket or quote pair.  Using an opening bracket or quote leaves the 
+" cursor at the start of the block, where a closing bracket leaves it at the end 
+" of the block. Works for: (, [, {, " and '.
+
+vnoremap ( <esc>`>a)<esc>`<i(<esc>
+vnoremap ) <esc>`<i(<esc>`>a)<esc>
+vnoremap [ <esc>`>a]<esc>`<i[<esc>
+vnoremap ] <esc>`<i[<esc>`>a]<esc>
+vnoremap { <esc>`>a}<esc>`<i{<esc>
+vnoremap } <esc>`<i{<esc>`>a}<esc>
+vnoremap < <esc>`>a><esc>`<i<>><esc>
+vnoremap > <esc>`<i<<esc>`>a<<esc>
+vnoremap " <esc>`>a"<esc>`<i"<esc>
+vnoremap ' <esc>`>a'<esc>`<i'<esc>
+
