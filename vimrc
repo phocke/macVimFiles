@@ -1,3 +1,8 @@
+"I want to try to work without matchit for now
+"let loaded_matchit = 1
+let g:loaded_unimpaired = 1
+set imd 
+set noimdisable 
 set t_Co=256
 "necessary on some Linux distros for pathogen to properly load bundles
 filetype off
@@ -27,16 +32,16 @@ set wrap linebreak nolist
 
 "mapping for command key to map navigation thru display lines instead
 "of just numbered lines
-vmap <D-j> gj
-vmap <D-k> gk
-vmap <D-4> g$
-vmap <D-6> g^
-vmap <D-0> g^
-nmap <D-j> gj
-nmap <D-k> gk
-nmap <D-4> g$
-nmap <D-6> g^
-nmap <D-0> g^
+nnoremap j gj
+nnoremap k gk
+vnoremap j gj
+vnoremap k gk
+nnoremap <Down> gj
+nnoremap <Up> gk
+vnoremap <Down> gj
+vnoremap <Up> gk
+inoremap <Down> <C-o>gj
+inoremap <Up> <C-o>gk
 
 "add some line space for easy reading
 set linespace=4
@@ -161,19 +166,6 @@ function! s:LongLines()
     return long_line_lens
 endfunction
 
-"find the median of the given array of numbers
-function! s:Median(nums)
-    let nums = sort(a:nums)
-    let l = len(nums)
-
-    if l % 2 == 1
-        let i = (l-1) / 2
-        return nums[i]
-    else
-        return (nums[l/2] + nums[(l/2)-1]) / 2
-    endif
-endfunction
-
 "indent settings
 set shiftwidth=2
 set softtabstop=2
@@ -220,19 +212,19 @@ if has("gui_running")
     "tell the term has 256 colors
     set t_Co=256
 
-    colorscheme cobalt
+    "colorscheme cobalt
     set guitablabel=%M%t
     set lines=40
-    set columns=115
+    set columns=125
 
     if has("gui_gnome")
         set term=gnome-256color
-        colorscheme cobalt
-        set guifont=Monospace\ Bold\ 12
+        colorscheme molokai
+        set guifont=Monospace\ Bold\ 14
     endif
 
     if has("gui_mac") || has("gui_macvim")
-        set guifont=Menlo:h14
+        set guifont=Menlo:h15
         " key binding for Command-T to behave properly
         " uncomment to replace the Mac Command-T key to Command-T plugin
         "macmenu &File.New\ Tab key=<nop>
@@ -240,7 +232,7 @@ if has("gui_running")
         " make Mac's Option key behave as the Meta key
         set invmmta
         try
-          set transparency=5
+          set transparency=15
         catch
         endtry
     endif
@@ -256,10 +248,9 @@ else
     "set railscasts colorscheme when running vim in gnome terminal
     if $COLORTERM == 'gnome-terminal'
         set term=gnome-256color
-        colorscheme cobalt
+        colorscheme molokai
     else
-      ""colorscheme molokai
-      colorscheme cobalt
+      colorscheme molokai
     endif
 endif
 
@@ -271,9 +262,8 @@ silent! nmap <silent> <C-f> :NERDTreeToggle<CR>
 
 "make <c-l> clear the highlight as well as redraw
 nnoremap <C-L> :nohls<CR><C-L>
+map <m-l> <esc>:nohlsearch<CR>
 inoremap <C-L> <C-O>:nohls<CR>
-
-map <C-1> <C-O>:nohls<CR>
 
 "map to bufexplorer
 silent! nnoremap <leader>b :BufExplorerHorizontalSplit<cr>
@@ -298,12 +288,6 @@ let g:ragtag_global_maps = 1
 
 "mark syntax errors with :signs
 let g:syntastic_enable_signs=1
-
-"key mapping for vimgrep result navigation
-map <A-o> :copen<CR>
-map <A-q> :cclose<CR>
-map <A-j> :cnext<CR>
-map <A-k> :cprevious<CR>
 
 "snipmate setup
 try
@@ -359,18 +343,6 @@ function! SetCursorPosition()
     end
 endfunction
 
-"define :HighlightLongLines command to highlight the offending parts of
-"lines that are longer than the specified length (defaulting to 80)
-command! -nargs=? HighlightLongLines call s:HighlightLongLines('<args>')
-function! s:HighlightLongLines(width)
-    let targetWidth = a:width != '' ? a:width : 79
-    if targetWidth > 0
-        exec 'match Todo /\%>' . (targetWidth) . 'v/'
-    else
-        echomsg "Usage: HighlightLongLines [natural number]"
-    endif
-endfunction
-
 "key mapping for window navigation
 map <C-h> <C-w>h
 map <C-j> <C-w>j
@@ -395,8 +367,8 @@ let ScreenShot = {'Icon':0, 'Credits':0, 'force_background':'#FFFFFF'}
 """""" from old vim 
 
 "Wrapped lines up and down works
-nmap <Down> gj
-nmap <Up> gk
+map <Down> gj
+map <Up> gk
 set fo=l
 set list
 set listchars=tab:\ \ ,extends:>,precedes:<
@@ -405,17 +377,14 @@ set listchars=tab:\ \ ,extends:>,precedes:<
 silent! map <silent> <C-f> :NERDTreeToggle<CR>
 silent! vmap <silent> <C-f> <esc>:NERDTreeToggle<CR>
 
-vmap <silent> <backspace> dd
-
-
 "Navigating buffers
-imap <c-left> <esc>:bprevious<cr>
-map <c-left> :bprevious<cr>
-vmap <c-left> <esc>:bprevious<cr>
+imap <silent> <c-left> <esc>:bprevious<c>
+map <silent> <c-left> :bprevious<cr>
+vmap <silent> <c-left> <esc>:bprevious<cr>
 
-imap <c-right> <esc>:bnext<cr>
-map <c-right> :bnext<cr>
-vmap <c-right> <esc>:bnext<cr>
+imap <silent> <c-right> <esc>:bnext<cr>
+map <silent> <c-right> :bnext<cr>
+vmap <silent> <c-right> <esc>:bnext<cr>
 
 "Pastemode
 nnoremap <f3> :set invpaste paste?<cr>
@@ -438,41 +407,32 @@ set smartcase
 set cursorline
 set nocursorcolumn
 
-"Move a line of text using command
-
-imap <D-down> <esc>mz:m+<cr>`z
-imap <D-up> <esc>mz:m-2<cr>`z
-nmap <D-down> mz:m+<cr>`z
-nmap <D-up> mz:m-2<cr>`z
-vmap <D-down> :m'>+<cr>`<my`>mzgv`yo`z
-vmap <D-up> :m'<-2<cr>`>my`
-
 "Search around
 set wrapscan
 
 "Toggle comments
 map <silent>c<space> <esc>:call NERDComment(0, "toggle")<cr>
 vmap <silent>c<space> <esc>:call NERDComment(1, "toggle")<cr>
+imap <silent>c<space> <esc>:call NERDComment(0, "toggle")<cr>i
 
 "Backspace inserts editing mode
-vmap <silent> <backspace> dd
 nmap <silent> <backspace> i<backspace>
+vmap <silent> <backspace> d
 
 "Shift + arrows make a selection like in traditional editors
-imap <s-right> <esc>v
-imap <s-left> <esc>v
-map <s-right> <esc>v
-map <s-left> <esc>v
+imap <s-right> <esc>v<right>
+imap <s-left> <esc>v<left>
+map <s-right> <esc>v<right>
+map <s-left> <esc>v<left>
+vmap <s-left> <left>
+vmap <s-right> <right>
 
 imap <s-up> <esc>V
 imap <s-down> <esc>V
 map <s-up> <esc>V
 map <s-down> <esc>V
-
 vmap <s-down> <down>
 vmap <s-up> <up>
-vmap <s-left> <left>
-vmap <s-right> <right>
 
 "Go to given tab
 imap <D-1> <Esc>1gt
@@ -485,15 +445,15 @@ imap <D-7> <Esc>7gt
 imap <D-8> <Esc>8gt
 imap <D-9> <Esc>9gt
 
-vmap <D-1> <Esc>1gt
-vmap <D-2> <Esc>2gt
-vmap <D-3> <Esc>3gt
-vmap <D-4> <Esc>4gt
-vmap <D-5> <Esc>5gt
-vmap <D-6> <Esc>6gt
-vmap <D-7> <Esc>7gt
-vmap <D-8> <Esc>8gt
-vmap <D-9> <Esc>9gt
+vmap <D-1> 1gt
+vmap <D-2> 2gt
+vmap <D-3> 3gt
+vmap <D-4> 4gt
+vmap <D-5> 5gt
+vmap <D-6> 6gt
+vmap <D-7> 7gt
+vmap <D-8> 8gt
+vmap <D-9> 9gt
 
 map <D-1> <Esc>1gt
 map <D-2> <Esc>2gt
@@ -508,6 +468,7 @@ map <D-9> <Esc>9gt
 " Bubble single lines
 nmap <C-Up> ddkP
 nmap <C-Down> ddp
+
 " Bubble multiple lines
 vmap <C-Up> xkP`[V`]
 vmap <C-Down> xp`[V`]
@@ -515,9 +476,9 @@ vmap <C-Down> xp`[V`]
 nmap // <Esc>:Ack!<space>
 
 "highlight whitespace
-"set listchars=tab:>-,trail:-
 set list
 
+"set list listchars=tab:→\ ,trail:·,eol:¬
 set list listchars=tab:→\ ,trail:·
 
 " PARENTHESIS, SQUARE BRACKET, BRACE, QUOTE EXPANDING
@@ -532,8 +493,21 @@ vnoremap [ <esc>`>a]<esc>`<i[<esc>
 vnoremap ] <esc>`<i[<esc>`>a]<esc>
 vnoremap { <esc>`>a}<esc>`<i{<esc>
 vnoremap } <esc>`<i{<esc>`>a}<esc>
-vnoremap < <esc>`>a><esc>`<i<>><esc>
-vnoremap > <esc>`<i<<esc>`>a<<esc>
 vnoremap " <esc>`>a"<esc>`<i"<esc>
 vnoremap ' <esc>`>a'<esc>`<i'<esc>
 
+"for text formatting
+map <a-f> gg=G
+
+"shortcut for search and replace
+vmap <D-r> <esc>:'<,'>s///g
+nmap <D-r> <esc>:%s///gc
+imap <D-r> <esc>:%s///gc
+
+"for switching between tabs like in google chrome :)
+map <D-A-Right> <esc>gt
+map <D-A-Left> <esc>gT
+
+"so it removes buffers when they're being hidden
+set bufhidden=unload
+set switchbuf=useopen

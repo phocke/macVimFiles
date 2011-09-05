@@ -18,19 +18,19 @@ endif
 let g:colors_name="cobalt"
 
 if has("gui_running")
-  hi Normal       guifg=#ffffff           guibg=#002240
+  hi Normal       guifg=#dddddd           guibg=#002240
   hi NonText      guifg=#002240           guibg=#002240
-  hi SpecialKey   guifg=#aaaaaa           guibg=#002240
-else 
-  hi Normal       guifg=#ffffff           guibg=#111110 
-  hi NonText      guifg=#aaaaaa           guibg=#111111 
-  hi SpecialKey   guifg=#aaaaaa           guibg=#111111 
+  hi SpecialKey   guifg=#999999           guibg=#002240
+else
+  hi Normal       guifg=#ffffff           guibg=#111110
+  hi NonText      guifg=#aaaaaa           guibg=#111111
+  hi SpecialKey   guifg=#aaaaaa           guibg=#111111
 endif
 
 hi Cursor         guifg=#333333           guibg=#ffffff
 hi CursorColum    guifg=#FFFFFF           guibg=red
 hi CursorLine     guibg=#000d1a
-hi CursorIM       guifg=#FFFFFF           guibg=#000000
+hi CursorIM       guifg=#FFFFFF           guibg=#ffffff
 hi Directory      guifg=#3ad900           guibg=#002240
 hi ErrorMsg       guifg=#FFFFFF           guibg=#ff1111
 hi VertSplit      guifg=#0065bf           guibg=#000000
@@ -40,11 +40,11 @@ hi LineNr         guifg=#0065bf           guibg=#000000
 hi ModeMsg        guifg=#FFFFFF           guibg=#000d1a
 hi MoreMsg        guifg=#FFFFFF           guibg=#3ad900
 hi Question       guifg=#FFFFFF           guibg=#3ad900
-hi Search         guifg=#ffffff           guibg=#3ad900          
+hi Search         guifg=#ffffff           guibg=#3ad900
 hi StatusLineNC   guibg=#000d1a           guifg=#0088ff
 hi StatusLine     guifg=#000d1a           guibg=#0088ff
 hi Title          guifg=#8B98AB           guibg=#0E2231
-hi Visual         guibg=#0065bf           guifg=#FFFFFF 
+hi Visual         guibg=#0065bf           guifg=#FFFFFF
 hi WarningMsg     guifg=#FFFFFF           guibg=red
 hi WildMenu       guifg=#FFFFFF           guibg=white
 
@@ -55,30 +55,31 @@ hi Comment        guifg=#0088ff
 hi Constant       guifg=#ff0044
 hi String         guifg=#3AD900
 hi Character      guifg=#E9C062
-hi Number         guifg=#ff0044 
-hi Boolean        guifg=#ff0044 
+hi Number         guifg=#ff0044
+hi Boolean        guifg=#ff0044
 hi Float          guifg=#F05A73
 hi Identifier     guifg=#f2dd00
 hi Function       guifg=#f2dd00 term=bold gui=bold
 hi Statement      guifg=#FF9D00
 hi Conditional    guifg=#FF9D00
 hi Repeat         guifg=#FF9D00
-hi Label          guifg=#ff0044 
+hi Label          guifg=#ff0044
 hi Operator       guifg=#ff9d00 term=bold gui=bold
-hi Keyword        guifg=#ff9d00 
+hi Keyword        guifg=#ff9d00   
 hi Exception      guifg=red
 hi PreProc        guifg=#FF9D00
-hi Include        guifg=#ff9d00 term=bold gui=bold 
+hi Include        guifg=#ff9d00 term=bold gui=bold
 hi Define         guifg=#FF9D00 term=bold gui=bold
 hi Macro          guifg=#9B703F
 hi PreCondit      guifg=#3AD900
-hi Type           guifg=#80FFBB 
+hi Type           guifg=#80FFBB
 hi StorageClass   guifg=#3AD900
 hi Structure      guifg=#ffee80 term=bold gui=bold
 hi Special        guifg=#F2DD00
-hi SpecialChar    guifg=white term=bold gui=bold
+hi SpecialChar    guifg=red term=bold gui=bold
+"hi SpecialKey     guifg=#fff
 hi Tag            guifg=#ff0044 term=bold gui=bold
-hi Delimiter      guifg=#FFFFFF 
+hi Delimiter      guifg=#FFFFFF
 hi SpecialComment guifg=#3AD900
 hi Debug          guifg=red
 hi Underlined     guifg=#Cf6A4C

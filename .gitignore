@@ -5,3 +5,8 @@ tags
 .VimballRecord
 .netrwhist
 bundle/vim-peepopen
+.hg/
+vim/src/
+vim/*
+.profile
+.sass-cache/*
