@@ -1,19 +1,15 @@
+set nocompatible
 if has("gui_running")
   "tell the term has 256 colors
   "colorscheme cobalt 
   set guitablabel=%M%t
   set guifont=Menlo:h15
   set transparency=15
-    
   "set invmmta
   "this is responisble for breaking polish signs support
-    
 else
   colorscheme molokai
-  "dont load csapprox if there is no gui support - silences an annoying warning
-  let g:CSApprox_loaded = 1
-  "set railscasts colorscheme when running vim in gnome terminal
-  set term=gnome-256color
+  set term=xterm-256color
 endif
 
 "load pathogen managed plugins
@@ -22,7 +18,6 @@ call pathogen#runtime_append_all_bundles()
 
 "Use Vim settings, rather then Vi settings (much better!).
 "This must be first, because it changes other options as a side effect.
-set nocompatible
 
 "allow backspacing over everything in insert mode
 set backspace=indent,eol,start
@@ -35,7 +30,6 @@ set showmode    "show current mode down the bottom
 
 set incsearch   "find the next match as we type the search
 set hlsearch    "hilight searches by default
-
 set number      "add line numbers
 set showbreak=…
 set wrap linebreak nolist
