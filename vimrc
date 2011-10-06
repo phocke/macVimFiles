@@ -1,14 +1,24 @@
-"I want to try to work without matchit for now
-"let loaded_matchit = 1
-let g:loaded_unimpaired = 1
-set imd 
-set noimdisable 
-set t_Co=256
-"necessary on some Linux distros for pathogen to properly load bundles
-filetype off
+if has("gui_running")
+  "tell the term has 256 colors
+  "colorscheme cobalt 
+  set guitablabel=%M%t
+  set guifont=Menlo:h15
+  set transparency=15
+    
+  "set invmmta
+  "this is responisble for breaking polish signs support
+    
+else
+  colorscheme molokai
+  "dont load csapprox if there is no gui support - silences an annoying warning
+  let g:CSApprox_loaded = 1
+  "set railscasts colorscheme when running vim in gnome terminal
+  set term=gnome-256color
+endif
 
 "load pathogen managed plugins
 call pathogen#runtime_append_all_bundles()
+
 
 "Use Vim settings, rather then Vi settings (much better!).
 "This must be first, because it changes other options as a side effect.
@@ -27,21 +37,23 @@ set incsearch   "find the next match as we type the search
 set hlsearch    "hilight searches by default
 
 set number      "add line numbers
-set showbreak=...
+set showbreak=…
 set wrap linebreak nolist
 
-"mapping for command key to map navigation thru display lines instead
-"of just numbered lines
-nnoremap j gj
-nnoremap k gk
-vnoremap j gj
-vnoremap k gk
-nnoremap <Down> gj
-nnoremap <Up> gk
-vnoremap <Down> gj
-vnoremap <Up> gk
-inoremap <Down> <C-o>gj
-inoremap <Up> <C-o>gk
+"mapping for command key to map navigation thru display lines instead of just numbered lines
+nnoremap <silent> j gj
+nnoremap <silent> k gk
+vnoremap <silent> j gj
+vnoremap <silent> k gk
+nnoremap <silent> <Down> gj
+nnoremap <silent> <Up> gk
+vnoremap <silent> <Down> gj
+vnoremap <silent> <Up> gk
+inoremap <silent> <Down> <C-o>gj
+inoremap <silent> <Up> <C-o>gk
+nmap <silent> <Down> gj
+nmap <silent> <Up> gk
+set fo=l
 
 "add some line space for easy reading
 set linespace=4
@@ -49,16 +61,8 @@ set linespace=4
 "disable visual bell
 set visualbell t_vb=
 
-"try to make possible to navigate within lines of wrapped lines
-nmap <Down> gj
-nmap <Up> gk
-set fo=l
-
 "statusline setup
 set statusline=%f       "tail of the filename
-
-"Git
-set statusline+=[%{GitBranch()}]
 
 "RVM
 set statusline+=%{exists('g:loaded_rvm')?rvm#statusline():''}
@@ -73,20 +77,20 @@ set laststatus=2
 set guioptions-=T
 
 "recalculate the trailing whitespace warning when idle, and after saving
-autocmd cursorhold,bufwritepost * unlet! b:statusline_trailing_space_warning
+"autocmd cursorhold,bufwritepost * unlet! b:statusline_trailing_space_warning
 
 "return '[\s]' if trailing white space is detected
 "return '' otherwise
-function! StatuslineTrailingSpaceWarning()
-    if !exists("b:statusline_trailing_space_warning")
-        if search('\s\+$', 'nw') != 0
-            let b:statusline_trailing_space_warning = '[\s]'
-        else
-            let b:statusline_trailing_space_warning = ''
-        endif
-    endif
-    return b:statusline_trailing_space_warning
-endfunction
+"function! StatuslineTrailingSpaceWarning()
+    "if !exists("b:statusline_trailing_space_warning")
+        "if search('\s\+$', 'nw') != 0
+            "let b:statusline_trailing_space_warning = '[\s]'
+        "else
+            "let b:statusline_trailing_space_warning = ''
+        "endif
+    "endif
+    "return b:statusline_trailing_space_warning
+"endfunction
 
 
 "return the syntax highlight group under the cursor ''
@@ -100,71 +104,26 @@ function! StatuslineCurrentHighlight()
 endfunction
 
 "recalculate the tab warning flag when idle and after writing
-autocmd cursorhold,bufwritepost * unlet! b:statusline_tab_warning
+"autocmd cursorhold,bufwritepost * unlet! b:statusline_tab_warning
 
 "return '[&et]' if &et is set wrong
 "return '[mixed-indenting]' if spaces and tabs are used to indent
 "return an empty string if everything is fine
-function! StatuslineTabWarning()
-    if !exists("b:statusline_tab_warning")
-        let tabs = search('^\t', 'nw') != 0
-        let spaces = search('^ ', 'nw') != 0
+"function! StatuslineTabWarning()
+    "if !exists("b:statusline_tab_warning")
+        "let tabs = search('^\t', 'nw') != 0
+        "let spaces = search('^ ', 'nw') != 0
 
-        if tabs && spaces
-            let b:statusline_tab_warning =  '[mixed-indenting]'
-        elseif (spaces && !&et) || (tabs && &et)
-            let b:statusline_tab_warning = '[&et]'
-        else
-            let b:statusline_tab_warning = ''
-        endif
-    endif
-    return b:statusline_tab_warning
-endfunction
-
-"recalculate the long line warning when idle and after saving
-autocmd cursorhold,bufwritepost * unlet! b:statusline_long_line_warning
-
-"return a warning for "long lines" where "long" is either &textwidth or 80 (if
-"no &textwidth is set)
-"
-"return '' if no long lines
-"return '[#x,my,$z] if long lines are found, were x is the number of long
-"lines, y is the median length of the long lines and z is the length of the
-"longest line
-function! StatuslineLongLineWarning()
-    if !exists("b:statusline_long_line_warning")
-        let long_line_lens = s:LongLines()
-
-        if len(long_line_lens) > 0
-            let b:statusline_long_line_warning = "[" .
-                        \ '#' . len(long_line_lens) . "," .
-                        \ 'm' . s:Median(long_line_lens) . "," .
-                        \ '$' . max(long_line_lens) . "]"
-        else
-            let b:statusline_long_line_warning = ""
-        endif
-    endif
-    return b:statusline_long_line_warning
-endfunction
-
-"return a list containing the lengths of the long lines in this buffer
-function! s:LongLines()
-    let threshold = (&tw ? &tw : 80)
-    let spaces = repeat(" ", &ts)
-
-    let long_line_lens = []
-
-    let i = 1
-    while i <= line("$")
-        let len = strlen(substitute(getline(i), '\t', spaces, 'g'))
-        if len > threshold
-            call add(long_line_lens, len)
-        endif
-        let i += 1
-    endwhile
-
-    return long_line_lens
-endfunction
+        "if tabs && spaces
+            "let b:statusline_tab_warning =  '[mixed-indenting]'
+        "elseif (spaces && !&et) || (tabs && &et)
+            "let b:statusline_tab_warning = '[&et]'
+        "else
+            "let b:statusline_tab_warning = ''
+        "endif
+    "endif
+    "return b:statusline_tab_warning
+"endfunction
 
 "indent settings
 set shiftwidth=2
@@ -181,14 +140,11 @@ set nofoldenable        "dont fold by default
 set wildmode=list:longest   "make cmdline tab completion similar to bash
 set wildmenu                "enable ctrl-n and ctrl-p to scroll thru matches
 set wildignore=*.o,*.obj,*~ "stuff to ignore when tab completing
-
-
 set formatoptions-=o "dont continue comments when pushing o/O
 
 "vertical/horizontal scroll off settings
 set scrolloff=3
 set sidescrolloff=7
-set sidescroll=1
 
 "load ftplugins and indent files
 filetype plugin on
@@ -208,56 +164,6 @@ set hidden
 let g:CommandTMaxHeight=10
 let g:CommandTMatchWindowAtTop=1
 
-if has("gui_running")
-    "tell the term has 256 colors
-    set t_Co=256
-
-    "colorscheme cobalt
-    set guitablabel=%M%t
-    set lines=40
-    set columns=125
-
-    if has("gui_gnome")
-        set term=gnome-256color
-        colorscheme molokai
-        set guifont=Monospace\ Bold\ 14
-    endif
-
-    if has("gui_mac") || has("gui_macvim")
-        set guifont=Menlo:h15
-        " key binding for Command-T to behave properly
-        " uncomment to replace the Mac Command-T key to Command-T plugin
-        "macmenu &File.New\ Tab key=<nop>
-        "map <D-t> :CommandT<CR>
-        " make Mac's Option key behave as the Meta key
-        set invmmta
-        try
-          set transparency=15
-        catch
-        endtry
-    endif
-
-    if has("gui_win32") || has("gui_win32s")
-        set guifont=Consolas:h12
-        set enc=utf-8
-    endif
-else
-    "dont load csapprox if there is no gui support - silences an annoying warning
-    let g:CSApprox_loaded = 1
-
-    "set railscasts colorscheme when running vim in gnome terminal
-    if $COLORTERM == 'gnome-terminal'
-        set term=gnome-256color
-        colorscheme molokai
-    else
-      colorscheme molokai
-    endif
-endif
-
-" PeepOpen uses <Leader>p as well so you will need to redefine it so something
-" else in your ~/.vimrc file, such as:
-" nmap <silent> <Leader>q <Plug>PeepOpen
-
 silent! nmap <silent> <C-f> :NERDTreeToggle<CR>
 
 "make <c-l> clear the highlight as well as redraw
@@ -266,25 +172,13 @@ map <m-l> <esc>:nohlsearch<CR>
 inoremap <C-L> <C-O>:nohls<CR>
 
 "map to bufexplorer
-silent! nnoremap <leader>b :BufExplorerHorizontalSplit<cr>
 silent! nnoremap <space>b :BufExplorerHorizontalSplit<cr>
-silent! nnoremap <c-b> :BufExplorerHorizontalSplit<cr>
 
 "map to CommandT TextMate style finder
-silent! nnoremap <leader>t :CommandT<CR>
 silent! nnoremap <space>t :CommandT<CR>
-silent! nnoremap <c-t> :CommandT<CR>
-
-"map Q to something useful
-noremap Q gq
 
 "make Y consistent with C and D
-nnoremap Y y$
-
-"bindings for ragtag
-inoremap <M-o>       <Esc>o
-inoremap <C-j>       <Down>
-let g:ragtag_global_maps = 1
+"nnoremap Y y$
 
 "mark syntax errors with :signs
 let g:syntastic_enable_signs=1
@@ -349,13 +243,6 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 
-"key mapping for saving file
-nmap <C-s> :w<CR>
-
-"key mapping for tab navigation
-nmap <Tab> gt
-nmap <S-Tab> gT
-
 "Key mapping for textmate-like indentation
 nmap <D-[> <<
 nmap <D-]> >>
@@ -366,14 +253,12 @@ let ScreenShot = {'Icon':0, 'Credits':0, 'force_background':'#FFFFFF'}
 
 """""" from old vim 
 
-"Wrapped lines up and down works
-map <Down> gj
-map <Up> gk
-set fo=l
-set list
+"set fo=l
+"set list
 set listchars=tab:\ \ ,extends:>,precedes:<
 
 "Toggle nerdtree
+silent! imap <silent> <C-f> <esc>:NERDTreeToggle<CR>
 silent! map <silent> <C-f> :NERDTreeToggle<CR>
 silent! vmap <silent> <C-f> <esc>:NERDTreeToggle<CR>
 
@@ -387,8 +272,6 @@ map <silent> <c-right> :bnext<cr>
 vmap <silent> <c-right> <esc>:bnext<cr>
 
 "Pastemode
-nnoremap <f3> :set invpaste paste?<cr>
-set pastetoggle=<f3>
 set showmode
 
 "Higlight search
@@ -420,12 +303,12 @@ nmap <silent> <backspace> i<backspace>
 vmap <silent> <backspace> d
 
 "Shift + arrows make a selection like in traditional editors
-imap <s-right> <esc>v<right>
-imap <s-left> <esc>v<left>
+imap <s-right> <esc><right>v
+imap <s-left> <esc>v
 map <s-right> <esc>v<right>
 map <s-left> <esc>v<left>
-vmap <s-left> <left>
 vmap <s-right> <right>
+vmap <s-left> <left>
 
 imap <s-up> <esc>V
 imap <s-down> <esc>V
@@ -476,9 +359,8 @@ vmap <C-Down> xp`[V`]
 nmap // <Esc>:Ack!<space>
 
 "highlight whitespace
-set list
+"set list
 
-"set list listchars=tab:→\ ,trail:·,eol:¬
 set list listchars=tab:→\ ,trail:·
 
 " PARENTHESIS, SQUARE BRACKET, BRACE, QUOTE EXPANDING
@@ -507,7 +389,3 @@ imap <D-r> <esc>:%s///gc
 "for switching between tabs like in google chrome :)
 map <D-A-Right> <esc>gt
 map <D-A-Left> <esc>gT
-
-"so it removes buffers when they're being hidden
-set bufhidden=unload
-set switchbuf=useopen
